@@ -11,6 +11,8 @@ import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.data.redis.listener.RedisMessageListenerContainer;
+import org.springframework.data.redis.listener.adapter.MessageListenerAdapter;
+import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 import sg.edu.nus.iss.vttp5a_paf_day25.service.SubscriberService;
@@ -68,8 +70,18 @@ public class RedisConfig {
         RedisConnectionFactory redisConnectionFactory = createConnectionFactory();
         RedisMessageListenerContainer container = new RedisMessageListenerContainer();
         container.setConnectionFactory(redisConnectionFactory);
-        container.addMessageListener(subscriber, ChannelTopic.of("mytopic"));
+        container.addMessageListener(listenerAdapter(subscriber), ChannelTopic.of("mytopic"));
 
         return container;
     }
+
+
+    @Bean
+    public MessageListenerAdapter listenerAdapter(SubscriberService redisConsumerService) {
+        MessageListenerAdapter adapter = new MessageListenerAdapter(redisConsumerService);
+        // adapter.setSerializer(new Jackson2JsonRedisSerializer<>(String.class));
+
+        return adapter;
+    }
+
 }
