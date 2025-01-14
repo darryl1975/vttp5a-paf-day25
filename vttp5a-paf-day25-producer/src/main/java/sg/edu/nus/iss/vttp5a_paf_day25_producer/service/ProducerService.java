@@ -11,11 +11,16 @@ import sg.edu.nus.iss.vttp5a_paf_day25_producer.model.Todo;
 @Service
 public class ProducerService {
     
-    @Autowired @Qualifier("todo")
+    @Autowired 
+    @Qualifier("todo")
     RedisTemplate<String, Todo> redisTemplate;
     
     @Value("${redis.topic1}")
     private String topic1;
+
+    // public ProducerService() {
+    //     redisTemplate = new RedisTemplate<>();
+    // }
 
     public void sendMessage(Todo todo) {
         redisTemplate.convertAndSend(topic1, todo);
