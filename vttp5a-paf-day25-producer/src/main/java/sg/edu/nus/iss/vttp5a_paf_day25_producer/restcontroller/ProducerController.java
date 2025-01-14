@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import sg.edu.nus.iss.vttp5a_paf_day25_producer.model.Order;
 import sg.edu.nus.iss.vttp5a_paf_day25_producer.model.Todo;
 import sg.edu.nus.iss.vttp5a_paf_day25_producer.service.ProducerService;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,5 +26,13 @@ public class ProducerController {
         
         return new ResponseEntity<>("Message sent", HttpStatus.OK);
     }
+
+    @PostMapping("/publish")
+    public ResponseEntity<String> sendOrder(@RequestBody Order order) {
+        producerService.publish(order);
+        
+        return new ResponseEntity<>("Message sent", HttpStatus.OK);
+    }
+    
     
 }
